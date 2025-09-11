@@ -1,0 +1,49 @@
+def login_user():
+    # Procedure to validate login inputs and  ???????
+    global user_LoggedIn # Global variable so that the UserID of the current user logged in can be used elsewhere as a FK
+    if login_username.value == "":
+        AppErrors.value = "You must enter a valid username" # Checks if username input is empty (presence check)
+    elif login_pw.value == "":
+        AppErrors.value = "You must enter a valid password" # 
+    else:
+        
+        query = "SELECT * from User WHERE user_name = ? AND user_password = ?"
+        rows = query_database(database_file, query, (login_username.value, login_pw.value)) # SQL query to retrieve username and password from database 
+        if len(rows) == 0:
+            AppErrors.value = "Invalid Password Or Username"
+        else:
+            user_LoggedIn = rows[0][0] # Set UserID to user_LoggedIn variable
+            #open_dashboard()
+	        # output welcome message
+            info("Success", f"welcome {login_username.value}")
+            menu()
+
+
+#   FRONT END IS DEFINED HERE
+#
+# Login window is start up window
+app = App( title="Login", height=400, bg="#d3d3d3")
+#
+login_spacetxt = Text(app, text="                                    ")
+login_spacetxt2 = Text(app, text="                                    ")
+login_toptxt = Text(app, text="OUR BUSINESS TECHNOLOGIES", size=20)
+login_toptxt2 = Text(app, text="To login please enter your details below and press login", size=10)
+login_spacetxt3 = Text(app, text="                                    ") 
+
+login_box = Box(app, layout="grid")
+login_blanktxt1 = Text(login_box , text="            ", grid=[1,0])
+login_txt1 = Text(login_box , text="Enter Username", align="left", grid=[0,0], size=15)
+login_username = TextBox(login_box , hide_text=False, align="left", grid=[2,0], width=30)
+
+login_blanktxt2 = Text(login_box, text="            ", grid=[1,1])
+login_txt2 = Text(login_box, text="Enter Password", align="left", grid=[0,1], size=15)
+login_pw = TextBox(login_box, hide_text=True, align="left", grid=[2,1], width=30)
+
+login_button = PushButton(app, text="Login", command=login_user)
+login_signup = PushButton(app, text="Signup", command=Open_Signup)
+
+login_bottom_text = PushButton(app, text="Forgot your password?", command=ForgottenMenu)
+login_bottom_text.tk.config(borderwidth=0)
+
+# Result / status text
+AppErrors = Text(app, text="", size=12, color="red")
