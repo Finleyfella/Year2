@@ -1,0 +1,24 @@
+#Dashboard 
+Dashboard = Window(app, title="Dashboard", height=400, bg="#d3d3d3")
+Dashboard.hide() # hide until needed
+
+
+imgbox = Box(Dashboard, layout = "grid", width="fill")
+aboutimg = Picture(imgbox, image="home.png" , grid=[0,0])
+
+
+app.display() # Display app on startup
+
+##  navigation procedures            
+#
+def Open_Signup():
+    sign_window.show()
+    app.hide()
+
+def BackToLogin():
+   sign_window.hide() 
+   app.show()
+
+def menu():
+    Dashboard.show()
+    app.hide()
