@@ -1,0 +1,65 @@
+from guizero import App, Window, PushButton, Text, Box, TextBox, Picture, info # Guizero imports to create front end
+from PIL import Image
+import random
+import re
+import tkinter as tk
+import io
+import sqlite3
+#from sqlite3 import Error # sqlite import to create and manage database
+import os
+import os.path # OS import to edit system files
+
+# SQL creation and inserting test data
+sql = """
+CREATE TABLE "User" ( 
+"userID" INTEGER NOT NULL,
+"user_name" TEXT,
+"user_firstname" TEXT,
+"user_surname" TEXT,
+"user_password" TEXT,
+"user_email" TEXT,
+PRIMARY KEY("userID" AUTOINCREMENT)
+);
+CREATE TABLE "Consultation" (
+"consultationID"  INTEGER NOT NULL,
+"consultation_date" TEXT,
+"consultation_timeslot" TEXT,
+"consultation_additionalinfo" TEXT,
+"userID"  INTEGER,
+PRIMARY KEY("consultationID" AUTOINCREMENT),
+FOREIGN KEY(userID) REFERENCES User(userID)
+);
+insert into User (user_name, user_firstname, user_surname, user_password, user_email) values ('UJoe', 'Strummer', 'Joe', 'pw1', 'Joe@gmail.com');
+insert into Consultation (consultation_date, consultation_timeslot, consultation_additionalinfo, userID) values ('2025/12/25', '9:00-10:00', 'very important', '1');
+"""
+#
+# global variables
+#
+database_file = 'myDB.db'
+#
+#
+if os.path.exists(database_file):
+   os.remove(database_file) # Removes database each time program starts for test purposes
+#
+conn = sqlite3.connect(database_file) 
+cursor = conn.cursor()
+cursor.executescript(sql)
+conn.commit() # Initialising SQL integration 
+#
+#
+def query_database(database, query, params=()):
+	# Function to query the database
+    with sqlite3.connect(database) as conn:
+        cur = conn.cursor()
+        cur.execute(query, params)
+        rows = cur.fetchall()
+    return rows
+#
+#
+def execute_sql(database, sql_statement, params=()):
+	# Function to execute SQL statements
+    with sqlite3.connect(database) as conn:
+        cur = conn.cursor()
+        cur.execute(sql_statement, params)
+        conn.commit()
+    return cur.lastrowid
