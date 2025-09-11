@@ -1,0 +1,98 @@
+def create_account(): # Get values from TextBoxes 
+    username = sign_txtbox1.value 
+    password = sign_txtbox2.value 
+    confirm_password = sign_txtbox3.value 
+    firstname = sign_txtbox4.value 
+    surname = sign_txtbox5.value 
+    email = sign_txtbox6.value
+    max_length = 20 
+    #Length check with a maximum character limit of 20 
+    if len(username) > max_length:
+       SignErrors.value = "Username cannot contain more then 20 characters" # Checks if the username is above the character limit 
+
+    elif len(firstname) > max_length:
+       SignErrors.value = "First name cannot contain more then 20 characters" # Checks if the first name is above the character limit
+       
+    elif len(surname) > max_length:
+       SignErrors.value = "Surname cannot contain more then 20 characters" # Checks if the surname is above the character limit
+
+    elif "" in [username, password, confirm_password, firstname, surname, email]:
+       SignErrors.value = "All fields are required" # Checks if all the feilds have an input 
+
+    elif len(password) <= 8:
+        SignErrors.value = "Password must be longer then 8 characters" # Length check
+
+    elif not re.search(r"[A-Z]", password):
+        SignErrors.value = "Password must have atleast one capital letter" # 
+
+    elif not re.search(r"\d", password):
+        SignErrors.value = "Password must have atleast one number" #
+
+    elif "@" and "." not in email:
+        SignErrors.value = "Email must contain an at (@) and a dot (.)" #
+
+    elif password != confirm_password:
+       SignErrors.value = "The passwords do not match up with eachother" # Checks if the passwords match eachother
+
+    elif "" in [username, password, confirm_password, firstname, surname, email]:
+       SignErrors.value = "All fields are required"
+
+    elif username.isalpha() == False:
+       SignErrors.value = "Username cannot contain numbers or special characters" # Checks if username has no numbers or special characters (type check)
+
+
+   # Used to impliment the infomation in signup to the database
+    else:
+            query = "INSERT INTO User (user_name, user_firstname, user_surname, user_password, user_email) VALUES (?, ?, ?, ?, ?)"
+            execute_sql(database_file, query, (username, firstname, surname, password, email)) # SQL query to insert new user into User
+            info("Success", "Account successfully created")
+
+
+
+
+
+
+# Sign up window
+#
+sign_window = Window(app, title="Sign up", height=400, bg="#d3d3d3")
+#
+sign_exit_box = Box(sign_window, width="fill", align="top")
+sign_exit_button = PushButton(sign_exit_box, text="Cancel", align="left", command=BackToLogin)
+sign_exit_button.bg = "#d3d3d3"
+
+#
+sign_toptxt = Text(sign_window, text="MY BUSINESS TECHNOLOGIES", size=20)
+sign_toptxt2 = Text(sign_window, text="Please Enter Details", size=15) # Creating signup window
+
+sign_box = Box(sign_window, layout="grid")
+sign_blanktxt1 = Text(sign_box, text="            ", grid=[1,0])
+sign_txt1 = Text(sign_box, text="Enter Username", align="left", grid=[0,0], size=15)
+sign_txtbox1 = TextBox(sign_box, hide_text=False, grid=[2,0], width=30)
+sign_txtbox1.bg = '#d3d3d3' # Creating a box with a grid layout and putting enter username textbox into box
+
+sign_blanktxt2 = Text(sign_box, text="            ", grid=[1,1])
+sign_txt2 = Text(sign_box, text="Enter Password", align="left", grid=[0,1], size=15)
+sign_txtbox2 = TextBox(sign_box, hide_text=True, grid=[2,1], width=30)
+
+sign_blanktxt3 = Text(sign_box, text="            ", grid=[1,2])
+sign_txt3 = Text(sign_box, text="Confirm Password", align="left", grid=[0,2], size=15)
+sign_txtbox3 = TextBox(sign_box, hide_text=True, grid=[2,2], width=30)
+
+sign_blanktxt4 = Text(sign_box, text="            ", grid=[1,3])
+sign_txt4 = Text(sign_box, text="Enter First Name", align="left", grid=[0,3], size=15)
+sign_txtbox4 = TextBox(sign_box, hide_text=False, grid=[2,3], width=30)
+
+sign_blanktxt5 = Text(sign_box, text="            ", grid=[1,4])
+sign_txt5 = Text(sign_box, text="Enter Surname", align="left", grid=[0,4], size=15)
+sign_txtbox5 = TextBox(sign_box, hide_text=False, grid=[2,4], width=30)
+
+sign_blanktxt6 = Text(sign_box, text="            ", grid=[1,5])
+sign_txt6 = Text(sign_box, text="Enter Email", align="left", grid=[0,5], size=15)
+sign_txtbox6 = TextBox(sign_box, hide_text=False, grid=[2,5], width=30)
+
+# Result / status text
+SignErrors = Text(sign_window, text="", size=12, color="red")
+
+create_account_button = PushButton(sign_window, text="Create Account", command=create_account)
+
+sign_window.hide() # hide until needed
