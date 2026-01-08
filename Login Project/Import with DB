@@ -29,7 +29,7 @@ CREATE TABLE "Consultation" (
 PRIMARY KEY("consultationID" AUTOINCREMENT),
 FOREIGN KEY(userID) REFERENCES User(userID)
 );
-insert into User (user_name, user_firstname, user_surname, user_password, user_email) values ('UJoe', 'Strummer', 'Joe', 'pw1', 'Joe@gmail.com');
+insert into User (user_name, user_firstname, user_surname, user_password, user_email) values ('philip', 'philip', 'smith', 'pw1', 'phil@gmail.com');
 insert into Consultation (consultation_date, consultation_timeslot, consultation_additionalinfo, userID) values ('2025/12/25', '9:00-10:00', 'very important', '1');
 """
 #
